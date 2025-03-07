@@ -16,7 +16,9 @@ import HelloWorld from './components/HelloWorld.vue'
 
 <style>
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes: emerald --default, forest --prefersdark;
+};
 </style>
 
 
