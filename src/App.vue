@@ -15,12 +15,13 @@ import HelloWorld from './components/HelloWorld.vue'
 </template>
 
 <style>
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "daisyui" {
-  themes: emerald --default, forest --prefersdark;
-};
+  themes:
+    emerald --default,
+    forest --prefersdark;
+}
 </style>
-
 
 <style scoped>
 .logo {

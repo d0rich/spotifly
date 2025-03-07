@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint:js": "eslint .",
+    "lint:prettier": "prettier --check .",
+    "lint": "npm run lint:js && npm run lint:prettier",
+    "lintfix": "prettier --write --list-different . && eslint . --fix"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.12",
@@ -24,6 +28,7 @@
     "eslint-plugin-unicorn": "^57.0.0",
     "typescript": "~5.7.2",
     "vite": "^6.2.0",
+    "vue-eslint-parser": "^10.1.1",
     "vue-tsc": "^2.2.4"
   }
 }
