@@ -14,6 +14,11 @@ import HelloWorld from './components/HelloWorld.vue'
   <HelloWorld msg="Vite + Vue" />
 </template>
 
+<style>
+@import "tailwindcss";
+</style>
+
+
 <style scoped>
 .logo {
   height: 6em;
