@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import type { ItemTypes, Market } from '@spotify/web-api-ts-sdk'
-import * as countryCodes from 'country-codes-list'
 import { ref, watch } from 'vue'
 import { useQueryControls } from '../composables/useQueryControls'
+import { useCountries } from '~/composables/useCountries'
 
-const { searchQuery: model } = useQueryControls()
+const { searchQuery: model, isValid } = useQueryControls()
 
-const countries: Record<Market, string> = countryCodes.customList(
-  'countryCode',
-  '{countryNameEn}'
-)
+const countries = useCountries()
 const typesToPick: Record<ItemTypes, string> = {
   show: 'Podcast',
   episode: 'Episode',
@@ -33,11 +30,7 @@ watch(pickedType, (value) => {
 })
 
 watch(pickedCountry, (value) => {
-  if (countries[value as Market] === undefined) {
-    model.value.market = null
-    return
-  }
-  model.value.market = value as Market
+  model.value.market = (value as Market) || null
 })
 </script>
 
@@ -62,21 +55,54 @@ watch(pickedCountry, (value) => {
         :aria-label="label"
       />
     </div>
+    <div v-if="!pickedType" role="alert" class="alert mb-4">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        class="stroke-info h-6 w-6 shrink-0"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        ></path>
+      </svg>
+      <span>It is required to choose a type of content.</span>
+    </div>
     <form class="join" @submit.prevent="emit('search')">
-      <input
-        type="text"
-        v-model="pickedCountry"
-        placeholder="Country Code"
-        class="input join-item max-w-32"
-        list="countries"
-      />
-      <input
-        type="text"
-        v-model="model.q"
-        placeholder="Search"
-        class="input join-item"
-      />
-      <button class="btn btn-primary join-item" type="submit">Search</button>
+      <div>
+        <input
+          type="text"
+          v-model="pickedCountry"
+          placeholder="Country Code"
+          class="input join-item max-w-32 validator"
+          list="countries"
+          pattern="[A-Z]{2}"
+        />
+        <div class="validator-hint max-w-32 hidden">
+          2-character country code or empty value should be provided
+        </div>
+      </div>
+      <div>
+        <input
+          type="text"
+          v-model="model.q"
+          required
+          pattern=".*\S+.*"
+          placeholder="Search"
+          class="input validator join-item"
+        />
+        <div class="validator-hint hidden">Search query is required</div>
+      </div>
+      <button
+        :disabled="!isValid"
+        class="btn btn-primary join-item"
+        type="submit"
+      >
+        Search
+      </button>
     </form>
     <datalist id="countries">
       <option
