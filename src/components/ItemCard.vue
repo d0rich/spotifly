@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import type {
   Artist,
   SimplifiedAlbum,
@@ -23,6 +23,8 @@ const props = defineProps<{
   item: Item
 }>()
 
+const isDescriptionOpened = ref(false)
+
 const image = computed(() => {
   if ('album' in props.item) {
     return props.item.album.images[0].url
@@ -38,6 +40,13 @@ const title = computed(() => {
   return props.item.name
 })
 
+const description = computed(() => {
+  if ('description' in props.item) {
+    return props.item.description
+  }
+  return ''
+})
+
 const descriptionHtml = computed(() => {
   if ('html_description' in props.item) {
     return props.item.html_description
@@ -51,18 +60,38 @@ const url = computed(() => {
 </script>
 
 <template>
-  <div class="card card-side bg-base-300 shadow-sm max-h-64">
-    <figure>
-      <img :src="image" alt="Cover" />
-    </figure>
-    <div class="card-body">
+  <div
+    class="grid grid-cols-[8rem_1fr] gap-4 bg-base-200 shadow-md rounded-xl p-4"
+  >
+    <img class="rounded-xl" :src="image" alt="Cover" />
+    <div class="flex flex-col justify-between">
       <h2 class="card-title">
         {{ title }} <kbd class="kbd kbd-md">{{ type }}</kbd>
       </h2>
-      <p v-html="descriptionHtml"></p>
-      <div class="card-actions justify-end">
+      <div>
         <a :href="url" target="_blank" class="btn btn-primary">Listen</a>
+      </div>
+    </div>
+    <div v-if="description" class="item-card__description">
+      <div class="collapse bg-base-300 border-base-300 border">
+        <input type="checkbox" v-model="isDescriptionOpened" />
+        <div class="collapse-title">
+          <div class="line-clamp-1">
+            <template v-if="isDescriptionOpened">Description</template>
+            <template v-else>
+              {{ description }}
+            </template>
+          </div>
+        </div>
+        <div class="collapse-content text-sm" v-html="descriptionHtml" />
       </div>
     </div>
   </div>
 </template>
+
+<style>
+@reference "../style.css";
+.item-card__description {
+  grid-column: span 2;
+}
+</style>

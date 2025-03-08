@@ -9,7 +9,7 @@ import ItemCard, { type Item } from '../components/ItemCard.vue'
 
 const searchQuery = ref<SearchInputModel>({
   q: '',
-  type: [],
+  type: ['show'],
   market: null
 })
 
@@ -33,7 +33,7 @@ async function search() {
   <SpotifyAuth />
   <SearchInput v-model="searchQuery" />
   <button @click="search" class="btn btn-primary">Search</button>
-  <div class="cards">
-    <ItemCard class="my-4" v-for="item in items" :item="item" :key="item.id" />
+  <div class="mx-auto max-w-5xl">
+    <ItemCard class="m-4" v-for="item in items" :item="item" :key="item.id" />
   </div>
 </template>

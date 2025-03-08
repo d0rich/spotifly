@@ -6,9 +6,11 @@ async function printToken() {
 }
 </script>
 <template>
-  <button @click="spotify.authenticate()" class="btn btn-primary">
-    Spotify Login
-  </button>
-  <button @click="spotify.logOut()" class="btn btn-danger">Logout</button>
-  <button @click="printToken" class="btn btn-danger">Token</button>
+  <div>
+    <button @click="spotify.authenticate()" class="btn btn-primary">
+      Spotify Login
+    </button>
+    <button @click="spotify.logOut()" class="btn btn-danger">Logout</button>
+    <button @click="printToken" class="btn btn-danger">Token</button>
+  </div>
 </template>

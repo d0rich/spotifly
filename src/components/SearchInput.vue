@@ -52,38 +52,40 @@ watch(pickedCountry, (value) => {
 </script>
 
 <template>
-  <input type="text" v-model="model.q" placeholder="Search" class="input" />
-  <div class="filter">
+  <div>
+    <input type="text" v-model="model.q" placeholder="Search" class="input" />
+    <div class="filter">
+      <input
+        class="btn btn-sm btn-secondary filter-reset"
+        type="radio"
+        name="contenttypes"
+        value=""
+        v-model="pickedType"
+        aria-label="All"
+      />
+      <input
+        v-for="(label, value) in typesToPick"
+        class="btn btn-sm btn-secondary"
+        type="radio"
+        name="contenttypes"
+        :value="value"
+        v-model="pickedType"
+        :aria-label="label"
+      />
+    </div>
     <input
-      class="btn btn-sm btn-secondary filter-reset"
-      type="radio"
-      name="contenttypes"
-      value=""
-      v-model="pickedType"
-      aria-label="All"
+      type="text"
+      v-model="pickedCountry"
+      placeholder="Country Code"
+      class="input"
+      list="countries"
     />
-    <input
-      v-for="(label, value) in typesToPick"
-      class="btn btn-sm btn-secondary"
-      type="radio"
-      name="contenttypes"
-      :value="value"
-      v-model="pickedType"
-      :aria-label="label"
-    />
+    <datalist id="countries">
+      <option
+        v-for="(country, code) in countries"
+        :value="code"
+        :label="country"
+      />
+    </datalist>
   </div>
-  <input
-    type="text"
-    v-model="pickedCountry"
-    placeholder="Country Code"
-    class="input"
-    list="countries"
-  />
-  <datalist id="countries">
-    <option
-      v-for="(country, code) in countries"
-      :value="code"
-      :label="country"
-    />
-  </datalist>
 </template>
