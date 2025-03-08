@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onBeforeMount } from 'vue'
+import type { Market } from '@spotify/web-api-ts-sdk'
 import { useQueryControls } from './composables/useQueryControls'
 import SearchInput from './components/SearchInput.vue'
 import ItemCard from './components/ItemCard.vue'
@@ -13,12 +14,16 @@ const { data, execute, status, error } = useAsyncData(
   () =>
     $fetch('/api/search', {
       method: 'POST',
-      body: searchQuery.value
+      body: searchQuery
     }),
   {
     immediate: false
   }
 )
+
+onBeforeMount(() => {
+  searchQuery.market = (localStorage.getItem('market') as Market) || null
+})
 
 const items = computed(() => {
   const allItems = []

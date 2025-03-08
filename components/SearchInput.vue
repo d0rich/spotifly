@@ -1,37 +1,23 @@
 <script setup lang="ts">
-import type { ItemTypes, Market } from '@spotify/web-api-ts-sdk'
-import { ref, watch } from 'vue'
+import type { ItemTypes } from '@spotify/web-api-ts-sdk'
 import { useQueryControls } from '../composables/useQueryControls'
 import { useCountries } from '~/composables/useCountries'
 
 const { searchQuery: model, isValid } = useQueryControls()
 
 const countries = useCountries()
-const typesToPick: Record<ItemTypes, string> = {
-  show: 'Podcast',
-  episode: 'Episode',
-  artist: 'Artist',
-  album: 'Album',
-  playlist: 'Playlist',
-  track: 'Track',
-  audiobook: 'Audiobook'
+
+const typesToPick: Record<string, ItemTypes[]> = {
+  Podcast: ['show'],
+  Episode: ['episode'],
+  Artist: ['artist'],
+  Album: ['album'],
+  Playlist: ['playlist'],
+  Track: ['track'],
+  Audiobook: ['audiobook']
 }
 
-const pickedType = ref<ItemTypes | ''>('show')
-const pickedCountry = ref<string>('')
 const emit = defineEmits(['search'])
-
-watch(pickedType, (value) => {
-  if (value === '') {
-    model.value.type = []
-    return
-  }
-  model.value.type = [value]
-})
-
-watch(pickedCountry, (value) => {
-  model.value.market = (value as Market) || null
-})
 </script>
 
 <template>
@@ -41,21 +27,21 @@ watch(pickedCountry, (value) => {
         class="btn btn-sm btn-primary filter-reset"
         type="radio"
         name="contenttypes"
-        value=""
-        v-model="pickedType"
+        :value="[]"
+        v-model="model.type"
         aria-label="All"
       />
       <input
-        v-for="(label, value) in typesToPick"
+        v-for="(value, label) in typesToPick"
         class="btn btn-sm btn-primary"
         type="radio"
         name="contenttypes"
         :value="value"
-        v-model="pickedType"
+        v-model="model.type"
         :aria-label="label"
       />
     </div>
-    <div v-if="!pickedType" role="alert" class="alert mb-4">
+    <div v-if="!model.type.length" role="alert" class="alert mb-4">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -75,7 +61,7 @@ watch(pickedCountry, (value) => {
       <div>
         <input
           type="text"
-          v-model="pickedCountry"
+          v-model="model.market"
           placeholder="Country Code"
           class="input join-item max-w-32 validator"
           list="countries"
