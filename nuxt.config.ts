@@ -7,5 +7,10 @@ export default defineNuxtConfig({
   css: ['~/assets/css/tailwind.css'],
   vite: {
     plugins: [tailwindcss()]
+  },
+  nitro: {
+    prerender: {
+      routes: ['/_d0rich/meta.json']
+    }
   }
 })

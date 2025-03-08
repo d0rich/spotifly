@@ -7,6 +7,7 @@ import ItemCard from './components/ItemCard.vue'
 import AlertInfo from './components/AlertInfo.vue'
 import AlertError from './components/AlertError.vue'
 import AlertWarning from './components/AlertWarning.vue'
+import MetaTags from './components/MetaTags.vue'
 
 const { searchQuery } = useQueryControls()
 
@@ -36,6 +37,7 @@ const items = computed(() => {
 </script>
 
 <template>
+  <MetaTags />
   <div class="container mx-auto">
     <SearchInput @search="execute" />
     <div class="mx-auto px-4 mt-10 max-w-5xl">
