@@ -33,6 +33,9 @@ const typesToPick: Record<ItemTypes, string> = {
 
 const pickedType = ref<ItemTypes | ''>('show')
 const pickedCountry = ref<string>('')
+const emit = defineEmits({
+  search: (model: SearchInputModel) => Promise<void>
+})
 
 watch(pickedType, (value) => {
   if (value === '') {
@@ -52,11 +55,10 @@ watch(pickedCountry, (value) => {
 </script>
 
 <template>
-  <div>
-    <input type="text" v-model="model.q" placeholder="Search" class="input" />
-    <div class="filter">
+  <div class="flex flex-col items-center px-4">
+    <div class="filter my-4">
       <input
-        class="btn btn-sm btn-secondary filter-reset"
+        class="btn btn-sm btn-primary filter-reset"
         type="radio"
         name="contenttypes"
         value=""
@@ -65,7 +67,7 @@ watch(pickedCountry, (value) => {
       />
       <input
         v-for="(label, value) in typesToPick"
-        class="btn btn-sm btn-secondary"
+        class="btn btn-sm btn-primary"
         type="radio"
         name="contenttypes"
         :value="value"
@@ -73,13 +75,22 @@ watch(pickedCountry, (value) => {
         :aria-label="label"
       />
     </div>
-    <input
-      type="text"
-      v-model="pickedCountry"
-      placeholder="Country Code"
-      class="input"
-      list="countries"
-    />
+    <form class="join" @submit.prevent="emit('search', model)">
+      <input
+        type="text"
+        v-model="pickedCountry"
+        placeholder="Country Code"
+        class="input join-item max-w-32"
+        list="countries"
+      />
+      <input
+        type="text"
+        v-model="model.q"
+        placeholder="Search"
+        class="input join-item"
+      />
+      <button class="btn btn-primary join-item" type="submit">Search</button>
+    </form>
     <datalist id="countries">
       <option
         v-for="(country, code) in countries"

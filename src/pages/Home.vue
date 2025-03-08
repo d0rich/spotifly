@@ -15,11 +15,11 @@ const searchQuery = ref<SearchInputModel>({
 
 const items = ref<Item[]>([])
 
-async function search() {
+async function search(searchQuery: SearchInputModel) {
   const results = await spotify.search(
-    searchQuery.value.q,
-    searchQuery.value.type,
-    searchQuery.value.market ?? undefined
+    searchQuery.q,
+    searchQuery.type,
+    searchQuery.market ?? undefined
   )
   const allItems = []
   for (const key in results) {
@@ -31,8 +31,7 @@ async function search() {
 
 <template>
   <SpotifyAuth />
-  <SearchInput v-model="searchQuery" />
-  <button @click="search" class="btn btn-primary">Search</button>
+  <SearchInput v-model="searchQuery" @search="search" />
   <div class="mx-auto max-w-5xl">
     <ItemCard class="m-4" v-for="item in items" :item="item" :key="item.id" />
   </div>
