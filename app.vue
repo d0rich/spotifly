@@ -63,6 +63,12 @@ const items = computed(() => {
   <MetaTags />
   <div class="grid grid-rows-[1fr_auto] min-h-screen">
     <main class="container mx-auto">
+      <div class="text-center mt-15 mb-10">
+        <h1 class="text-5xl font-bold text-primary mb-3">Spotifly</h1>
+        <p class="text-balance">
+          Search content on Spotify like you are in a different country!
+        </p>
+      </div>
       <SearchInput @search="execute" />
       <div class="mx-auto px-4 mt-10 max-w-5xl">
         <AlertInfo v-if="status === 'idle' || status === 'pending'">
