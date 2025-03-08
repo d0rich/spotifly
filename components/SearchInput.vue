@@ -2,20 +2,9 @@
 import type { ItemTypes, Market } from '@spotify/web-api-ts-sdk'
 import * as countryCodes from 'country-codes-list'
 import { ref, watch } from 'vue'
+import { useQueryControls } from '../composables/useQueryControls'
 
-export type SearchInputModel = {
-  q: string
-  type: ItemTypes[]
-  market: Market | null
-}
-
-const model = defineModel<SearchInputModel>({
-  default: {
-    q: '',
-    type: [],
-    market: null
-  }
-})
+const { searchQuery: model } = useQueryControls()
 
 const countries: Record<Market, string> = countryCodes.customList(
   'countryCode',
