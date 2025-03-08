@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { spotify } from './services/spotify'
-import SpotifyAuth from './components/SpotifyAuth.vue'
+import { ref, computed } from 'vue'
 import SearchInput, {
   type SearchInputModel
 } from './components/SearchInput.vue'
@@ -13,26 +11,26 @@ const searchQuery = ref<SearchInputModel>({
   market: null
 })
 
-const items = ref<Item[]>([])
+const { data, execute, status } = useFetch('/api/search', {
+  method: 'POST',
+  body: searchQuery
+})
 
-async function search(searchQuery: SearchInputModel) {
-  const results = await spotify.search(
-    searchQuery.q,
-    searchQuery.type,
-    searchQuery.market ?? undefined
-  )
+const items = computed(() => {
   const allItems = []
+  const results = data.value
   for (const key in results) {
     allItems.push(...(results[key as keyof typeof results]?.items ?? []))
   }
-  items.value = allItems
-}
+  return allItems
+})
 </script>
 
 <template>
-  <SpotifyAuth />
-  <SearchInput v-model="searchQuery" @search="search" />
-  <div class="mx-auto max-w-5xl">
-    <ItemCard class="m-4" v-for="item in items" :item="item" :key="item.id" />
+  <div class="container mx-auto">
+    <SearchInput v-model="searchQuery" @search="execute" />
+    <div class="mx-auto max-w-5xl">
+      <ItemCard class="m-4" v-for="item in items" :item="item" :key="item.id" />
+    </div>
   </div>
 </template>

@@ -33,9 +33,7 @@ const typesToPick: Record<ItemTypes, string> = {
 
 const pickedType = ref<ItemTypes | ''>('show')
 const pickedCountry = ref<string>('')
-const emit = defineEmits({
-  search: (model: SearchInputModel) => Promise<void>
-})
+const emit = defineEmits(['search'])
 
 watch(pickedType, (value) => {
   if (value === '') {
@@ -75,7 +73,7 @@ watch(pickedCountry, (value) => {
         :aria-label="label"
       />
     </div>
-    <form class="join" @submit.prevent="emit('search', model)">
+    <form class="join" @submit.prevent="emit('search')">
       <input
         type="text"
         v-model="pickedCountry"
