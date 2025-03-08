@@ -64,13 +64,16 @@ const url = computed(() => {
     class="grid grid-cols-[8rem_1fr] gap-4 bg-base-200 shadow-md rounded-xl p-4"
   >
     <img class="rounded-xl" :src="image" alt="Cover" />
-    <div class="flex flex-col justify-between">
-      <h2 class="card-title">
-        {{ title }} <kbd class="kbd kbd-md">{{ type }}</kbd>
-      </h2>
-      <div>
-        <a :href="url" target="_blank" class="btn btn-primary">Listen</a>
+    <div class="flex flex-col justify-between items-start gap-2">
+      <div class="w-full">
+        <div class="flex justify-end">
+          <kbd class="kbd kbd-md mb-1">{{ type }}</kbd>
+        </div>
+        <h2 class="card-title">
+          {{ title }}
+        </h2>
       </div>
+      <a :href="url" target="_blank" class="btn btn-primary">Listen</a>
     </div>
     <div v-if="description" class="item-card__description">
       <div class="collapse bg-base-300 border-base-300 border">
