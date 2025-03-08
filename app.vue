@@ -2,21 +2,34 @@
 import { computed, onBeforeMount } from 'vue'
 import type { Market } from '@spotify/web-api-ts-sdk'
 import { useQueryControls } from './composables/useQueryControls'
+import { usePagination } from './composables/usePagination'
 import SearchInput from './components/SearchInput.vue'
 import ItemCard from './components/ItemCard.vue'
 import AlertInfo from './components/AlertInfo.vue'
 import AlertError from './components/AlertError.vue'
 import AlertWarning from './components/AlertWarning.vue'
 import MetaTags from './components/MetaTags.vue'
+import Pagination from './components/Pagination.vue'
 
 const { searchQuery } = useQueryControls()
+const { afterFetch, queryPage, paginationQuery } = usePagination()
+
+const currentQuery = ref(JSON.stringify(searchQuery))
 
 const { data, execute, status, error } = useAsyncData(
-  () =>
-    $fetch('/api/search', {
+  () => {
+    if (JSON.stringify(searchQuery) !== currentQuery.value) {
+      queryPage(1)
+      currentQuery.value = JSON.stringify(searchQuery)
+    }
+    return $fetch('/api/search', {
       method: 'POST',
-      body: searchQuery
-    }),
+      body: {
+        ...searchQuery,
+        ...paginationQuery
+      }
+    })
+  },
   {
     immediate: false
   }
@@ -26,13 +39,22 @@ onBeforeMount(() => {
   searchQuery.market = (localStorage.getItem('market') as Market) || null
 })
 
+const changePage = (page: number) => {
+  queryPage(page)
+  execute()
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
 const items = computed(() => {
-  const allItems = []
   const results = data.value
   for (const key in results) {
-    allItems.push(...(results[key as keyof typeof results]?.items ?? []))
+    const currentType = results[key as keyof typeof results]
+    if (currentType) {
+      afterFetch(currentType)
+      return currentType.items
+    }
   }
-  return allItems
+  return []
 })
 </script>
 
@@ -60,6 +82,9 @@ const items = computed(() => {
           :item="item"
           :key="item.id"
         />
+        <div class="flex justify-center">
+          <Pagination class="my-10" @navigate="changePage" />
+        </div>
       </div>
     </div>
   </div>
