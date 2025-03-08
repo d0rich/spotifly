@@ -10,6 +10,7 @@ import AlertError from './components/AlertError.vue'
 import AlertWarning from './components/AlertWarning.vue'
 import MetaTags from './components/MetaTags.vue'
 import Pagination from './components/Pagination.vue'
+import Footer from './components/Footer.vue'
 
 const { searchQuery } = useQueryControls()
 const { afterFetch, queryPage, paginationQuery } = usePagination()
@@ -60,32 +61,35 @@ const items = computed(() => {
 
 <template>
   <MetaTags />
-  <div class="container mx-auto">
-    <SearchInput @search="execute" />
-    <div class="mx-auto px-4 mt-10 max-w-5xl">
-      <AlertInfo v-if="status === 'idle' || status === 'pending'">
-        <span v-if="status === 'idle'">Enter a search query.</span>
-        <span v-else>
-          <span class="loading loading-ring loading-md" /> Loading...
-        </span>
-      </AlertInfo>
-      <AlertError v-else-if="error">
-        <span>Error: something wrong happened on our side ({{ error }})</span>
-      </AlertError>
-      <AlertWarning v-else-if="status === 'success' && items.length === 0">
-        <span>No results</span>
-      </AlertWarning>
-      <div v-else>
-        <ItemCard
-          class="my-4"
-          v-for="item in items"
-          :item="item"
-          :key="item.id"
-        />
-        <div class="flex justify-center">
-          <Pagination class="my-10" @navigate="changePage" />
+  <div class="grid grid-rows-[1fr_auto] min-h-screen">
+    <main class="container mx-auto">
+      <SearchInput @search="execute" />
+      <div class="mx-auto px-4 mt-10 max-w-5xl">
+        <AlertInfo v-if="status === 'idle' || status === 'pending'">
+          <span v-if="status === 'idle'">Enter a search query.</span>
+          <span v-else>
+            <span class="loading loading-ring loading-md" /> Loading...
+          </span>
+        </AlertInfo>
+        <AlertError v-else-if="error">
+          <span>Error: something wrong happened on our side ({{ error }})</span>
+        </AlertError>
+        <AlertWarning v-else-if="status === 'success' && items.length === 0">
+          <span>No results</span>
+        </AlertWarning>
+        <div v-else>
+          <ItemCard
+            class="my-4"
+            v-for="item in items"
+            :item="item"
+            :key="item.id"
+          />
+          <div class="flex justify-center">
+            <Pagination class="my-10" @navigate="changePage" />
+          </div>
         </div>
       </div>
-    </div>
+    </main>
+    <Footer />
   </div>
 </template>
