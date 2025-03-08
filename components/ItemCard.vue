@@ -90,7 +90,6 @@ const url = computed(() => {
 </template>
 
 <style>
-@reference "../style.css";
 .item-card__description {
   grid-column: span 2;
 }

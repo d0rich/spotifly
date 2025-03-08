@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { spotify } from '../services/spotify'
-import SpotifyAuth from '../components/SpotifyAuth.vue'
+import { spotify } from './services/spotify'
+import SpotifyAuth from './components/SpotifyAuth.vue'
 import SearchInput, {
   type SearchInputModel
-} from '../components/SearchInput.vue'
-import ItemCard, { type Item } from '../components/ItemCard.vue'
+} from './components/SearchInput.vue'
+import ItemCard, { type Item } from './components/ItemCard.vue'
 
 const searchQuery = ref<SearchInputModel>({
   q: '',
