@@ -3,11 +3,13 @@ import type { ItemTypes, Market } from '@spotify/web-api-ts-sdk'
 import * as countryCodes from 'country-codes-list'
 import { ref, watch } from 'vue'
 
-const model = defineModel<{
+export type SearchInputModel = {
   q: string
   type: ItemTypes[]
   market: Market | null
-}>({
+}
+
+const model = defineModel<SearchInputModel>({
   default: {
     q: '',
     type: [],
@@ -61,7 +63,7 @@ watch(pickedCountry, (value) => {
       aria-label="All"
     />
     <input
-      v-for="(value, label) in typesToPick"
+      v-for="(label, value) in typesToPick"
       class="btn btn-sm btn-secondary"
       type="radio"
       name="contenttypes"
