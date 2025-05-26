@@ -1,11 +1,25 @@
 <script setup lang="ts">
 import { joinURL } from 'ufo'
+import { useServerHead } from '#imports'
 
 const title = 'Spotifly'
 const ogTitle = 'Spotifly'
 const description =
   'Search content on Spotify like you are in a different country.'
 const imageHref = joinURL('https://spotifly.d0rich.me', 'og', 'image.jpg')
+
+useServerHead({
+  script: [
+    {
+      src: 'https://static.cloudflareinsights.com/beacon.min.js',
+      async: true,
+      defer: true,
+      'data-cf-beacon': JSON.stringify({
+        token: '88d63ae6f6224757a3f40d6cad07cb2d'
+      })
+    }
+  ]
+})
 </script>
 
 <template>
