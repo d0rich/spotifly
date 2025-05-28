@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import AvatarAnimated from './AvatarAnimated.vue'
+</script>
+
 <template>
   <footer>
     <div class="footer sm:footer-horizontal bg-base-200 text-base-content p-10">
@@ -19,7 +23,9 @@
           Developer Ⓓ {{ new Date().getFullYear() }} - This website is developed
           by
           <a href="https://d0rich.me" class="link link-hover">
-            d0rich (Nikolai Dorofeev)
+            d0rich (Nikolai Dorofeev) <AvatarAnimated
+              class="inline-block w-6 h-6"
+            />
           </a>
         </p>
       </aside>
